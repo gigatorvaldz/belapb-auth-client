@@ -1,0 +1,23 @@
+body {
+    background-color: #b5c0c8;
+    height: 100vh;
+}
+
+.auth-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.auth-form button[type="submit"] {
+    margin-top: 1rem;
+}
