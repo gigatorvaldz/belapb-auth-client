@@ -11,9 +11,15 @@ export default class AuthService {
         const response = await api.post(
             '/login',
             loginData,
+            {
+
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            }
         )
         
-        console.log(response)
 
         if (response.status !== 200) {
 
@@ -22,8 +28,8 @@ export default class AuthService {
         }
 
 
-        coockieService.setCookie('accessToken', response.data.access_token)
-        coockieService.setCookie('refreshToken', response.data.refresh_token)
+        coockieService.setCookie('accessToken', response.data.access_token, 14)
+        coockieService.setCookie('refreshToken', response.data.refresh_token, 14)
 
         // По-хорошему, тут алерт не нужен, но оставляем для дебага и потому что нет нормального диалогового окна с сообщениями
         alert(response.data.message)
@@ -45,8 +51,7 @@ export default class AuthService {
 
             }
         )
-        
-        console.log(response)
+
 
         if (response.status !== 200) {
 
@@ -56,8 +61,8 @@ export default class AuthService {
 
         // По-хорошему, с регистрации этого не должно приходить
 
-        coockieService.setCookie('accessToken', response.data.access_token)
-        coockieService.setCookie('refreshToken', response.data.refresh_token)
+        coockieService.setCookie('accessToken', response.data.access_token, 14)
+        coockieService.setCookie('refreshToken', response.data.refresh_token, 14)
 
         // По-хорошему, тут алерт не нужен, но оставляем для дебага и потому что нет нормального диалогового окна с сообщениями
         alert(response.data.message)

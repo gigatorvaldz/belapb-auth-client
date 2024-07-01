@@ -21,3 +21,14 @@ body {
 .auth-form button[type="submit"] {
     margin-top: 1rem;
 }
+
+.auth-alternative {
+    cursor: pointer;
+    color: rgb(78, 25, 163);
+    transition: .3s ease-in-out;
+}
+
+
+.auth-alternative:hover {
+    color: rgb(0, 0, 245);
+}

@@ -25,7 +25,59 @@ for (const element of authAlternatives) {
     )
 }
 
+
+function isValidPassword(passwordString) {
+
+    if (typeof passwordString !== "string") {
+
+        return {
+            isPasswordValid: false,
+            passwordValidationMessage: 'Пароль должен быть строкой',
+        }
+
+    }
+
+    if (passwordString.length < 6) {
+
+        return {
+            isPasswordValid: false,
+            passwordValidationMessage: 'Пароль должен состоять более чем из 6 символов',
+        }
+
+    }
+
+
+    if (!/\d/.test(passwordString)) {
+
+        return {
+            isPasswordValid: false,
+            passwordValidationMessage: 'Пароль должен содержать хотябы одну цифру',
+        }
+
+    }
+
+    if (!/[A-Z]/.test(passwordString) || !/[a-z]/.test(passwordString)) {
+
+        return {
+            isPasswordValid: false,
+            passwordValidationMessage: 'Пароль должен содержать буквы обоих регистров',
+        }
+
+    }
+
+
+    return {
+        
+        isPasswordValid: true,
+        passwordValidationMessage: 'Пароль прошёл валидацию',
+        
+    }
+
+}
+
+
 const registerForm = document.getElementById('register')
+
 
 registerForm.addEventListener(
     'submit', 
@@ -33,13 +85,41 @@ registerForm.addEventListener(
 
         event.preventDefault()
 
-        const form = event.target;
-        const password = form.password.value;
-        const confirmPassword = form.confirm_password.value;
+        const form = event.target
+        const username = form.username.value
+        const password = form.password.value
+        const confirmPassword = form.confirm_password.value
+        
+        if(!username) {
+            alert('Логин должен быть указан!')
+
+            return
+        }
+
+        if(!password) {
+            alert('Пароли должен быть указан (минимум 6 символов, должен содержать цифры и буквы в обоих регистрах)')
+
+            return
+        }
+
+        const {
+            isPasswordValid,
+            passwordValidationMessage,
+        } = isValidPassword(password)
+
+        if(!isPasswordValid) {
+
+            alert(passwordValidationMessage)
+
+            return
+        }
 
         if (password !== confirmPassword) {
-            alert('Пароли не совпадают!');
-            return;
+
+            alert('Пароли не совпадают!')
+
+            return
+
         }
     
         const formData = new FormData(event.target)
@@ -54,8 +134,6 @@ registerForm.addEventListener(
         })
     
         const jsonString = JSON.stringify(formObject)
-    
-        console.log(jsonString)
 
         const loader = document.getElementById('auth-loader')
 
@@ -106,8 +184,6 @@ loginForm.addEventListener(
         })
     
         const jsonString = JSON.stringify(formObject)
-    
-        console.log(jsonString)
 
         const loader = document.getElementById('auth-loader')
 
@@ -131,7 +207,8 @@ loginForm.addEventListener(
         loader.classList.add('hidden')
 
         loginForm.classList.remove('hidden')
-        // switchAuthType()
+
+        redirectTo(LINK_TO_REDIRECT_AFTER_AUTH)
 
     }
 )

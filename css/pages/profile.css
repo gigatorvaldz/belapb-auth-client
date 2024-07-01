@@ -1,0 +1,39 @@
+body {
+    background-color: #b5c0c8;
+    height: 100vh;
+}
+
+.profile-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#profile {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    margin: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.field-value {
+    margin: 10px 0;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.field-value:last-child {
+    border-bottom: none;
+}
+
+.field {
+    font-weight: bold;
+    color: #333;
+}
+
+.value {
+    color: #555;
+}
