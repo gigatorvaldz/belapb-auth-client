@@ -25,19 +25,64 @@ function getAccessTokenFromCookies() {
 }
 
 
+function getRefreshTokenFromCookies() {
+
+    const refreshToken = coockieService.getCookie('refreshToken')
+
+    if (!refreshToken) {
+
+        return
+
+    }
+
+    return refreshToken
+
+}
+
+
 api.interceptors.request.use(
 
-    config => {
+    async config => {
 
-        const token = getAccessTokenFromCookies()
+        let token = getAccessTokenFromCookies()
+
 
         if (!token) {
 
-            return config
+            const refreshToken = getRefreshTokenFromCookies()
 
-        }
 
-        if (token) {
+            if (refreshToken) {
+
+                const refreshResponse = await axios.post(
+                    `${API_URL}refresh_token`,
+                    {},
+                    {
+        
+                        headers: {
+                            'Authorization': `Bearer ${refreshToken}`
+                        }
+        
+                    }
+                )
+        
+
+                if (refreshResponse.status !== 200) {
+
+                    return alert('Auth error')
+                    
+                }
+
+
+                coockieService.setCookie('accessToken', refreshResponse.data.access_token, refreshResponse.data.access_token_expires)
+                coockieService.setCookie('refreshToken', refreshResponse.data.refresh_token, refreshResponse.data.refresh_token_expires)
+
+                token = refreshResponse.data.access_token
+
+                config.headers['Authorization'] = `Bearer ${token}`
+            }
+
+        } else {
 
             config.headers['Authorization'] = `Bearer ${token}`
 

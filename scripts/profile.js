@@ -1,4 +1,5 @@
 import CoockieService from "./CoockieService.js";
+import AuthService from "./AuthService.js";
 import ProfileService from "./ProfileService.js";
 import { redirectTo } from "./utils.js";
 
@@ -6,6 +7,18 @@ const LINK_TO_REDIRECT_IF_NO_AUTH = 'http://localhost:5500/pages/auth.html'
 
 const coockieService = new CoockieService()
 const profileService = new ProfileService()
+const authService = new AuthService()
+
+document.getElementById('auth-logout').addEventListener(
+    "click",
+    async () => {
+
+        await authService.logout()
+
+        redirectTo(LINK_TO_REDIRECT_IF_NO_AUTH)
+
+    }
+)
 
 function insertDataIntoProfile(data) {
     const contentDiv = document.getElementById('profile')
@@ -48,15 +61,15 @@ async function fetchProfile() {
 
 if (!coockieService.getCookie('accessToken')) {
 
-    if (coockieService.getCookie('resfreshToken')) {
-
-        // refresh token logic
+    if (!coockieService.getCookie('refreshToken')) {
 
         redirectTo(LINK_TO_REDIRECT_IF_NO_AUTH)
 
     }
 
-    redirectTo(LINK_TO_REDIRECT_IF_NO_AUTH)
+    // redirectTo(LINK_TO_REDIRECT_IF_NO_AUTH)
+
+    fetchProfile()
 
 } else {
 

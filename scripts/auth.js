@@ -174,6 +174,8 @@ loginForm.addEventListener(
 
         const formData = new FormData(event.target)
 
+        const isRememberMe = formData.get('signin-form__remember-me') === 'on'
+
         // Удаляем лишнее, пока что нам это не нужно
         formData.delete('signin-form__remember-me')
 
@@ -190,7 +192,7 @@ loginForm.addEventListener(
         loader.classList.remove('hidden')
         loginForm.classList.add('hidden')
 
-        const isRegistrationSuccess = await authService.login(jsonString)
+        const isRegistrationSuccess = await authService.login(jsonString, isRememberMe)
 
         if (!isRegistrationSuccess) {
 
@@ -241,11 +243,17 @@ function switchAuthType(newAuthType) {
 
 if (!coockieService.getCookie('accessToken')) {
 
-    if (coockieService.getCookie('resfreshToken')) {
+    const refreshToken = coockieService.getCookie('refreshToken')
 
-        // refresh, redirect
+    if (refreshToken) {
 
+        // const isRefreshed = await authService.refresh(refreshToken)
+        // Тут можно в случае чего дописать доп. логику при обновлении refresh-токена
         redirectTo(LINK_TO_REDIRECT_AFTER_AUTH)
+
+
+        // // Скорее всего рефреш токен expired, так что пользователю нужно перезайти
+        // coockieService.deleteCookie('refreshToken')
 
     }
 
